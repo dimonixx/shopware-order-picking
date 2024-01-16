@@ -50,8 +50,8 @@ class Client implements ClientInterface
 
             $response = null;
         }
-        return file_get_contents(__DIR__.'/../Tests/data/response.json');
-//        return $response?->getBody()->read($response->getBody()->getSize());
+
+        return $response?->getBody()->read($response->getBody()->getSize());
     }
 
     public function getErrors(): array
