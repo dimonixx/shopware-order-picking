@@ -36,7 +36,7 @@ class Client implements ClientInterface
                 $extension->beforeRequest($endpoint, $method, $options);
             }
 
-            $response = $this->client->request($endpoint, $method, $options);
+            $response = $this->client->request($method, $endpoint, $options);
 
             foreach ($this->extensions as $extension) {
                 $extension->afterRequest($endpoint, $method, $options, $response);
@@ -51,7 +51,7 @@ class Client implements ClientInterface
             $response = null;
         }
 
-        return $response?->getBody()->read($response->getBody()->getSize());
+        return (string) $response?->getBody();
     }
 
     public function getErrors(): array
