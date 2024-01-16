@@ -5,7 +5,7 @@
         <title>API configuration</title>
         <input-field type="text">
             <name>apiToken</name>
-            <label>API base url</label>
+            <label>API token</label>
         </input-field>
         <input-field type="text">
             <name>apiBaseUri</name>
@@ -19,5 +19,10 @@
             <name>apiEndpointOrderImport</name>
             <label>Picking order import endpoint</label>
         </input-field>
+        <component name="sw-entity-multi-id-select">
+            <name>customerGroups</name>
+            <entity>customer_group</entity>
+            <label>Customer groups allowed to use order picking lists</label>
+        </component>
     </card>
 </config>

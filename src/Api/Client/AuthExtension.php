@@ -39,7 +39,6 @@ class AuthExtension implements ClientExtensionInterface
 
     public function afterRequest(string $endpoint, string $method, array $options, ?ResponseInterface $response): void
     {
-        // TODO: Implement afterRequest() method.
-    }
 
+    }
 }

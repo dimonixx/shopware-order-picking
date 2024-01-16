@@ -71,6 +71,7 @@ class DataProvider implements DataProviderInterface
             $productSearchCriteria->addFilter(
                 new EqualsAnyFilter('productNumber', $skus)
             );
+            $productSearchCriteria->addAssociations(['media', 'media.media']);
 
             $products = $this->productRepository
                 ->search($productSearchCriteria, $context->getContext())
