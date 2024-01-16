@@ -12,10 +12,10 @@ class OrderPickingPermissions
     {
     }
 
-    public function allowed(CustomerEntity $entity): bool
+    public function allowed(?CustomerEntity $customer): bool
     {
         $customerGroupIds = $this->configService->get('MtoOrderPicking.config.customerGroups');
 
-        return in_array($entity->getGroupId(), $customerGroupIds);
+        return $customer !== null && in_array($customer->getGroupId(), $customerGroupIds);
     }
 }

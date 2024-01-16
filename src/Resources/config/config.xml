@@ -16,8 +16,8 @@
             <label>Picking lists endpoint</label>
         </input-field>
         <input-field type="text">
-            <name>apiEndpointOrderImport</name>
-            <label>Picking order import endpoint</label>
+            <name>apiEndpointOrderExport</name>
+            <label>Picking order export endpoint</label>
         </input-field>
         <component name="sw-entity-multi-id-select">
             <name>customerGroups</name>

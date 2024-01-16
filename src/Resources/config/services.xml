@@ -101,6 +101,7 @@
             <argument type="service" id="MtoOrderPicking\Api\ClientFactory"/>
             <argument type="service" id="order.repository"/>
             <argument type="service" id="MtoOrderPicking\OrderExport\OrderConverter"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
         <service id="MtoOrderPicking\OrderExport\Messaging\OrderExportHandler">

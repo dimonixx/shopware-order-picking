@@ -20,7 +20,7 @@ class OrderPickingExtension extends AbstractExtension
         ];
     }
 
-    public function orderPickingAllowed(CustomerEntity $customerEntity): bool
+    public function orderPickingAllowed(?CustomerEntity $customerEntity): bool
     {
         return $this->orderPickingPermissions->allowed($customerEntity);
     }
