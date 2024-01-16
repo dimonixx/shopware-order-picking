@@ -1,0 +1,163 @@
+{% sw_extends '@Storefront/storefront/page/account/_page.html.twig' %}
+
+{% set orderPickingOptions = {
+    pickingLists: page.customerOrderPicking.pickingLists
+} %}
+
+{% block page_account_main %}
+    <div class="account-content-main account-order-picking">
+        {% block page_account_main_content %}
+
+            <div class="row order-picking gx-4" data-order-picking-plugin
+                 data-order-picking-plugin-options='{{ orderPickingOptions|json_encode }}'>
+                {% block page_account_order_picking_shipping_details %}
+                    <div class="col-md-3 shipping-details p-2">
+                        <div class="shipping-details-inner h-100 px-2">
+                            <div class="col-sm-12 header-row">
+                                <h5 class="header-minimal">{{ 'account.pickingList.shipping-details'|trans }}</h5>
+                            </div>
+                            <div class="form-group w-100">
+                                <label class="form-label">{{ 'account.pickingList.customer'|trans }}</label>
+                                <input type="text" data-shipping-option data-name="customer" class="form-control"/>
+                            </div>
+                            <div class="form-group w-100">
+                                <label class="form-label">{{ 'account.pickingList.phone'|trans }}</label>
+                                <input type="text" data-shipping-option data-name="phone" class="form-control"/>
+                            </div>
+                            <div class="form-group w-100">
+                                <label class="form-label">{{ 'account.pickingList.billing-address'|trans }}</label>
+                                <select class="form-control" data-billing-address>
+                                    {% for address in page.customerOrderPicking.billingAddresses %}
+                                        <option data-address="{{ address|json_encode }}">
+                                            {{ address.street }} {{ address.zip }} {{ address.city }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group w-100">
+                                <label class="form-label">{{ 'account.pickingList.shipping-address'|trans }}</label>
+                                <select class="form-control" data-shipping-address>
+                                    {% for address in page.customerOrderPicking.shippingAddresses %}
+                                        <option data-address="{{ address|json_encode }}">
+                                            {{ address.street }} {{ address.zip }} {{ address.city }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group w-100">
+                                {% set pickerOptions = {
+                                    locale: app.request.locale,
+                                    enableTime: false
+                                } %}
+
+                                <label class="form-label">{{ 'account.pickingList.delivery-date'|trans }}</label>
+                                <input class="form-control" data-date-picker
+                                       data-date-picker-options="{{ pickerOptions|json_encode|escape('html_attr') }}"
+                                       data-shipping-option data-name="delivery_date"/>
+                            </div>
+                            <div class="form-group w-100">
+                                <div>
+                                    <label class="form-label">
+                                        <input type="checkbox" data-shipping-option data-name="fix" value="fix"/>
+                                        {{ 'account.pickingList.delivery-fix'|trans }}
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="form-label">
+                                        <input type="checkbox" data-shipping-option data-name="neutral" value="neutral"/>
+                                        {{ 'account.pickingList.delivery-neutral'|trans }}
+                                    </label>
+                                </div>
+                                <div>
+                                    <label class="form-label">
+                                        <input type="checkbox" data-shipping-option data-name="avis" value="avis"/>
+                                        {{ 'account.pickingList.delivery-avis'|trans }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group w-100">
+                                <label class="form-label">{{ 'account.pickingList.notes'|trans }}</label>
+                                <textarea class="form-control" data-shipping-option data-name="notes"></textarea>
+                            </div>
+                            <div class="form-group w-100">
+                                <button class="btn btn-primary w-100" id="order">
+                                    {{ 'account.pickingList.add-to-cart'|trans }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endblock %}
+
+                {% block page_account_order_picking_lists %}
+                    <div class="col-md-3 order-picking-lists p-2">
+                        <div class="order-picking-lists-inner h-100 px-2">
+                            <div class="col-sm-12 header-row">
+                                <h5 class="header-minimal">{{ 'account.pickingList.overview'|trans }}</h5>
+                            </div>
+                            <div class="pt-1 pb-1 mb-1" >
+                                <label>
+                                    <input class="form-input" data-picking-list-select-all type="checkbox"/>
+                                    {{ 'pickingList.products.selectAll'|trans }}
+                                </label>
+                            </div>
+                            {% for pickingList in page.customerOrderPicking.pickingLists %}
+                                <div class="pt-1 pb-1 mb-1" data-picking-list
+                                     data-picking-list-number="{{ pickingList.number }}">
+                                    <input class="form-input" data-picking-list-select-all type="checkbox"/>
+                                    <button type="button" class="btn btn-info active w-75" data-bs-toggle="button" autocomplete="off">
+                                        {{ pickingList.name }}
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endblock %}
+
+                {% block page_account_order_picking_list_items %}
+                    <div class="col-md-6 order-picking-list-products p-2">
+                        <div class="order-picking-list-products-inner h-100 overflow-y-auto px-2">
+                            <div class="col-sm-12 header-row">
+                                <h5 class="header-minimal">{{ 'account.pickingList.products'|trans }}</h5>
+                            </div>
+                            {% for pickingList in page.customerOrderPicking.pickingLists %}
+                                {% for product in pickingList.products %}
+                                    <div class="row product-row mb-2 m-0 visible"
+                                         data-picking-product
+                                         data-product-id="{{ page.customerOrderPicking.shopProducts[product.swagSku].id }}"
+                                         data-product-sku="{{ product.swagSku }}"
+                                         data-picking-list-number="{{ pickingList.number }}">
+                                        <div class="col-md-8 p-0">
+                                            <div class="row m-0">
+                                                <div class="col-md-1 p-0">
+                                                    <input type="checkbox">
+                                                </div>
+                                                <div class="col-md-auto p-0 px-1">
+                                                    <div style="height: 75px;width: 75px;background: antiquewhite;"></div>
+                                                </div>
+                                                <div class="col-md-7 p-0">
+                                                    {{ page.customerOrderPicking.shopProducts[product.swagSku].name }} {{ product.swagSku }}
+                                                    {{ page.customerOrderPicking.shopProducts[product.swagSku].description|slice(0, 50) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 p-0">
+                                            <input value="{{ product.quantity }}"
+                                                   class="form-control text-center product-quantity"/>
+                                        </div>
+                                        <div class="col-md-2 p-0">
+                                            <input type="hidden" class="product-net-price"
+                                                   value="{{ product.netPrice }}"/>
+                                            <input type="hidden" class="product-gross-price"
+                                                   value="{{ product.netPrice }}"/>
+                                            <span class="product-price">{{ product.netPrice }}</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endblock %}
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}

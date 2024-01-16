@@ -1,0 +1,39 @@
+.account-content-main {
+  .order-picking {
+
+  }
+
+  .shipping-details, .order-picking-lists, .order-picking-list-products {
+    max-height: 760px;
+  }
+
+  .shipping-details-inner, .order-picking-lists-inner, .order-picking-list-products-inner {
+    border-color: var(--bs-table-color);
+    border: 1px solid;
+    max-height: 100%;
+    overflow-y: auto;
+  }
+
+  .order-picking-list-products {
+    .product-row {
+      &.visible {
+
+      }
+
+      &.hidden {
+        display: none;
+      }
+    }
+  }
+
+  .order-picking-list-products {
+    .product-price {
+      padding: 0.5625rem;
+    }
+  }
+}
+
+.line-item-picking-list-number {
+  margin-bottom: $spacer-sm;
+  font-size: $font-size-sm;
+}

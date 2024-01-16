@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>API configuration</title>
+        <input-field type="text">
+            <name>apiToken</name>
+            <label>API base url</label>
+        </input-field>
+        <input-field type="text">
+            <name>apiBaseUri</name>
+            <label>API base uri</label>
+        </input-field>
+        <input-field type="text">
+            <name>apiEndpointPickingLists</name>
+            <label>Picking lists endpoint</label>
+        </input-field>
+        <input-field type="text">
+            <name>apiEndpointOrderImport</name>
+            <label>Picking order import endpoint</label>
+        </input-field>
+    </card>
+</config>

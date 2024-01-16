@@ -1,0 +1,42 @@
+{
+  "name": "swag/plugin-skeleton",
+  "description": "Skeleton plugin",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dmytro Makaruk",
+      "email": "dima.makaruk@googlemail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "MtoOrderPicking\\": "src/"
+    }
+  },
+  "require": {
+    "php": "~8.1.0 || ~8.2.0",
+    "shopware/core": "^6.5.0.0",
+    "shopware/administration": "^6.5.0.0",
+    "shopware/storefront": "^6.5.0.0",
+    "phpdocumentor/reflection-docblock": "5.3.0"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^1.8",
+    "squizlabs/php_codesniffer": "^3.6",
+    "phpunit/phpunit": "^9.6",
+    "phpunit/php-code-coverage": "^9.2.14"
+  },
+  "extra": {
+    "shopware-plugin-class": "MtoOrderPicking\\MtoOrderPicking",
+    "label": {
+      "de-DE": "Mto OrderPicking",
+      "en-GB": "Mto OrderPicking"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "symfony/runtime": true
+    }
+  }
+}

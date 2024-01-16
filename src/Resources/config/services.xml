@@ -1,0 +1,112 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults autowire="true" autoconfigure="true"/>
+
+        <service id="MtoOrderPicking\Api\ClientFactory">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="tagged_iterator" tag="orderpicking.api.client.extension"/>
+        </service>
+
+        <service id="MtoOrderPicking\Api\Client\AuthExtension">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <tag name="orderpicking.api.client.extension"/>
+        </service>
+
+        <service id="MtoOrderPicking\Api\Client\LogExtension">
+            <argument type="service" id="logger"/>
+            <tag name="orderpicking.api.client.extension"/>
+        </service>
+
+        <service id="MtoOrderPicking\OrderPicking\Service\OrderPickingCartService">
+            <argument type="service" id="Shopware\Core\Checkout\Cart\LineItemFactoryRegistry"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
+            <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\AccountService"/>
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="customer_address.repository"/>
+            <argument type="service" id="country.repository"/>
+            <argument type="service" id="salutation.repository"/>
+        </service>
+
+        <service id="MtoOrderPicking\EventListener\SalesChannelContextPermissionsListener">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="MtoOrderPicking\EventListener\OrderPlacedEventSubscriber">
+            <argument type="service" id="messenger.bus.shopware"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="MtoOrderPicking\EventListener\OrderConverterEventSubscriber">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="MtoOrderPicking\EventListener\CartLineItemAddEventSubscriber">
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="MtoOrderPicking\Api\Provider\DataProvider"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="MtoOrderPicking\OrderPicking\Cart\OrderPickingCollector">
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="MtoOrderPicking\Api\Provider\DataProvider"/>
+            <tag name="shopware.cart.collector" priority="5000"/>
+        </service>
+
+        <service id="MtoOrderPicking\OrderPicking\Cart\OrderPickingProcessor">
+            <argument type="service" id="MtoOrderPicking\Api\Provider\DataProvider"/>
+            <argument type="service" id="customer_address.repository"/>
+            <argument type="service" id="Shopware\Core\Checkout\Cart\Price\QuantityPriceCalculator"/>
+            <tag name="shopware.cart.processor" priority="5000"/>
+        </service>
+
+        <service id="MtoOrderPicking\Api\Provider\DataProvider">
+            <argument type="service" id="MtoOrderPicking\Api\ClientFactory"/>
+            <argument type="service" id="serializer"/>
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
+
+        <service id="MtoOrderPicking\Api\Provider\CachedDataProvider"
+                 decorates="MtoOrderPicking\Api\Provider\DataProvider">
+            <argument type="service" id="MtoOrderPicking\Api\Provider\CachedDataProvider.inner"/>
+            <argument type="service" id="cache.object"/>
+        </service>
+
+        <service id="MtoOrderPicking\Page\AccountOrderPickingPageLoader" public="true">
+            <argument type="service" id="MtoOrderPicking\Api\Provider\DataProvider"/>
+            <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader"/>
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <service id="MtoOrderPicking\Controller\Account\OrderPickingController" public="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <call method="setTwig">
+                <argument type="service" id="twig"/>
+            </call>
+        </service>
+
+        <service id="MtoOrderPicking\OrderExport\OrderConverter">
+            <argument type="service" id="serializer"/>
+        </service>
+
+        <service id="MtoOrderPicking\OrderExport\OrderExporter">
+            <argument type="service" id="MtoOrderPicking\Api\ClientFactory"/>
+            <argument type="service" id="order.repository"/>
+            <argument type="service" id="MtoOrderPicking\OrderExport\OrderConverter"/>
+        </service>
+
+        <service id="MtoOrderPicking\OrderExport\Messaging\OrderExportHandler">
+            <argument type="service" id="MtoOrderPicking\OrderExport\OrderExporter"/>
+            <tag name="messenger.message_handler"/>
+        </service>
+
+    </services>
+</container>

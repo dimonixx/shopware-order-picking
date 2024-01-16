@@ -1,0 +1,100 @@
+{
+  "status": {
+    "statusCode": 200,
+    "message": "done"
+  },
+  "shippingAddr": [
+    {
+      "firstName": "Name",
+      "lastName": "Name",
+      "zip": "12345",
+      "city": "Berlin",
+      "street": "Straße Nr.",
+      "country": "DE"
+    }
+  ],
+  "billingAddr": [
+    {
+      "firstName": "Name",
+      "lastName": "Name",
+      "zip": "12345",
+      "city": "Berlin",
+      "street": "Straße Nr.",
+      "country": "DE"
+    }
+  ],
+  "pickingLists": [
+    {
+      "number": "01020304",
+      "name": "Pickinglist name",
+      "products": [
+        {
+          "swagSku": "123456",
+          "qty": "20",
+          "netPrice": "134.546",
+          "grossPrice": "160.110"
+        },
+        {
+          "swagSku": "789012",
+          "qty": "12",
+          "netPrice": "13.454",
+          "grossPrice": "16.010"
+        },
+        {
+          "swagSku": "12345623",
+          "qty": "20",
+          "netPrice": "134.546",
+          "grossPrice": "160.110"
+        },
+        {
+          "swagSku": "7890123",
+          "qty": "12",
+          "netPrice": "13.454",
+          "grossPrice": "16.010"
+        },
+        {
+          "swagSku": "789021123",
+          "qty": "12",
+          "netPrice": "13.454",
+          "grossPrice": "16.010"
+        },
+        {
+          "swagSku": "789220123",
+          "qty": "12",
+          "netPrice": "13.454",
+          "grossPrice": "16.010"
+        },
+        {
+          "swagSku": "712890123",
+          "qty": "12",
+          "netPrice": "13.454",
+          "grossPrice": "16.010"
+        },
+        {
+          "swagSku": "121314",
+          "qty": "200",
+          "netPrice": "1345.463",
+          "grossPrice": "1601.101"
+        }
+      ]
+    },
+    {
+      "number": "09080706",
+      "name": "Pickinglist name 2",
+      "products": [
+        {
+          "swagSku": "121314",
+          "qty": "200",
+          "netPrice": "1345.463",
+          "grossPrice": "1601.101"
+        },
+        {
+          "swagSku": "243546",
+          "qty": "9",
+          "netPrice": "1.345",
+          "grossPrice": "1.601"
+        }
+      ]
+    }
+  ]
+}

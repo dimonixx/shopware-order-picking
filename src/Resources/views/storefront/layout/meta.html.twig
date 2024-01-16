@@ -1,0 +1,21 @@
+{% sw_extends '@Storefront/storefront/layout/meta.html.twig' %}
+
+{% block layout_head_javascript_router %}
+    <script>
+        window.activeNavigationId = '{{ page.header.navigation.active.id }}';
+        window.router = {
+            'frontend.cart.offcanvas': '{{ path('frontend.cart.offcanvas') }}',
+            'frontend.cookie.offcanvas': '{{ path('frontend.cookie.offcanvas') }}',
+            'frontend.checkout.finish.page': '{{ path('frontend.checkout.finish.page') }}',
+            'frontend.checkout.info': '{{ path('frontend.checkout.info') }}',
+            'frontend.menu.offcanvas': '{{ path('frontend.menu.offcanvas') }}',
+            'frontend.cms.page': '{{ path('frontend.cms.page') }}',
+            'frontend.cms.navigation.page': '{{ path('frontend.cms.navigation.page') }}',
+            'frontend.account.addressbook': '{{ path('frontend.account.addressbook') }}',
+            'frontend.country.country-data': '{{ path('frontend.country.country.data') }}',
+            'frontend.app-system.generate-token': '{{ path('frontend.app-system.generate-token', { name: "Placeholder" }) }}',
+            'frontend.account.order-picking-add-to-cart': '{{ path('frontend.account.order-picking-add-to-cart') }}'
+        };
+        window.salesChannelId = '{{ app.request.attributes.get('sw-sales-channel-id') }}';
+    </script>
+{% endblock %}

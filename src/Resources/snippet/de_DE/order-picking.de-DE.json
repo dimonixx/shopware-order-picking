@@ -1,0 +1,26 @@
+{
+  "account": {
+    "pickingList": {
+      "link": "Kommissionierung",
+      "shipping-details": "Versanddetails",
+      "customer": "Auftraggeber",
+      "phone": "Telefonnummer",
+      "billing-address": "Rechnungsadresse",
+      "shipping-address": "Lieferadresse",
+      "delivery-date": "Lieferdatum",
+      "delivery-fix": "Fixtermin",
+      "delivery-neutral": "neutraler Versand",
+      "delivery-avis": "Avis",
+      "notes": "Anmerkungen",
+      "add-to-cart": "Zum Warenkorb hinzufügen",
+      "overview": "Kommissionsübersicht",
+      "products": "Artikelübersicht"
+    }
+  },
+  "pickingList": {
+    "number": "Picking list number",
+    "products": {
+      "selectAll": "Alle auswählen"
+    }
+  }
+}

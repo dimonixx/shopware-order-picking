@@ -1,0 +1,26 @@
+{
+  "account": {
+    "pickingList": {
+      "link": "Order picking",
+      "shipping-details": "Shipping details",
+      "customer": "Customer",
+      "phone": "Phone",
+      "billing-address": "Billing address",
+      "shipping-address": "Shipping address",
+      "delivery-date": "Delivery date",
+      "delivery-fix": "Fixed date",
+      "delivery-neutral": "Neutral delivery",
+      "delivery-avis": "Avis",
+      "notes": "Notes",
+      "add-to-cart": "Add to cart",
+      "overview": "Pickinglists",
+      "products": "Products"
+    }
+  },
+  "pickingList": {
+    "number": "Picking list number",
+    "products": {
+      "selectAll": "Select all"
+    }
+  }
+}
