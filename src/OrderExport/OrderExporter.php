@@ -8,10 +8,13 @@ use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Util\Json;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrderExporter
 {
+    public const CONFIG_PATH_API_ORDER_EXPORT = 'MtoOrderPicking.config.apiEndpointOrderExport';
+
     public const EXPORT_SUCCESSFUL = 1;
 
     public const EXPORT_FAILED = 0;
@@ -19,7 +22,8 @@ class OrderExporter
     public function __construct(
         protected ClientFactoryInterface $clientFactory,
         protected EntityRepository $entityRepository,
-        protected OrderConverter $orderConverter
+        protected OrderConverter $orderConverter,
+        protected SystemConfigService $configService
     ) {
     }
 
@@ -40,9 +44,11 @@ class OrderExporter
             try {
                 $orderConvertedData = $this->orderConverter->convert($order);
 
+                $uri = $this->configService->get(self::CONFIG_PATH_API_ORDER_EXPORT);
+
                 $client = $this->clientFactory->create();
                 $response = $client->request(
-                    '',
+                    $uri,
                     Request::METHOD_POST,
                     [
                         'headers' => [

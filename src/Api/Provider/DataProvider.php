@@ -17,6 +17,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class DataProvider implements DataProviderInterface
 {
+    public const CONFIG_PATH_ORDER_PICKING_LISTS = 'MtoOrderPicking.config.apiEndpointPickingLists';
+
     protected ?ClientInterface $client = null;
 
     protected array $customerOrderPicking = [];
@@ -46,7 +48,14 @@ class DataProvider implements DataProviderInterface
             return $this->customerOrderPicking[$customerNumber];
         }
 
-        $orderPickingData = $this->getClient()->request('/', Request::METHOD_GET, ['userNr' => $customerNumber]);
+        $uri = $this->configService->get(self::CONFIG_PATH_ORDER_PICKING_LISTS);
+
+        $orderPickingData = $this->getClient()
+            ->request(
+                $uri,
+                Request::METHOD_POST,
+                ['body' => json_encode(['userNr' => $customerNumber]), 'headers' => 'Content-Type: application/json']
+            );
 
         $customerOrderPickingData = null;
 
