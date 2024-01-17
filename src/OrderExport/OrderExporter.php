@@ -65,7 +65,7 @@ class OrderExporter
                 if (array_key_exists('status', $responseData) && (int) $responseData['status']['code'] === 200) {
                     $customFields = $order->getCustomFields();
 
-                    $customFields['order_number'] = $responseData['orderNumber'];
+                    $customFields['order_export_number'] = $responseData['orderNumber'];
                     $customFields['exported'] = 1;
 
                     $order->setCustomFields($customFields);

@@ -5,6 +5,7 @@ namespace MtoOrderPicking;
 use Shopware\Core\Defaults;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
@@ -40,7 +41,7 @@ class MtoOrderPicking extends Plugin
                                 'de-DE' => 'Auftraggerber',
                                 Defaults::LANGUAGE_SYSTEM => "Customer"
                             ],
-                            'customFieldPosition' => 1
+                            'customFieldPosition' => 10
                         ]
                     ],
                     [
@@ -52,7 +53,7 @@ class MtoOrderPicking extends Plugin
                                 'de-DE' => 'Telefon',
                                 Defaults::LANGUAGE_SYSTEM => "Phone"
                             ],
-                            'customFieldPosition' => 1
+                            'customFieldPosition' => 20
                         ]
                     ],
                     [
@@ -64,7 +65,7 @@ class MtoOrderPicking extends Plugin
                                 'de-DE' => 'Anmerkungen',
                                 Defaults::LANGUAGE_SYSTEM => "Notes"
                             ],
-                            'customFieldPosition' => 1
+                            'customFieldPosition' => 30
                         ]
                     ],
                     [
@@ -76,7 +77,7 @@ class MtoOrderPicking extends Plugin
                                 'de-DE' => 'Lieferdatum',
                                 Defaults::LANGUAGE_SYSTEM => "Delivery date"
                             ],
-                            'customFieldPosition' => 1
+                            'customFieldPosition' => 40
                         ]
                     ],
                     [
@@ -88,7 +89,8 @@ class MtoOrderPicking extends Plugin
                                 'de-DE' => 'Fixtermin',
                                 Defaults::LANGUAGE_SYSTEM => "Fixed"
                             ],
-                            'customFieldPosition' => 1
+                            'time_24h' => true,
+                            'customFieldPosition' => 50
                         ]
                     ],
                     [
@@ -100,7 +102,7 @@ class MtoOrderPicking extends Plugin
                                 'de-DE' => 'Neutraler Versand',
                                 Defaults::LANGUAGE_SYSTEM => "Neutral Shipping"
                             ],
-                            'customFieldPosition' => 1
+                            'customFieldPosition' => 60
                         ]
                     ],
                     [
@@ -112,9 +114,26 @@ class MtoOrderPicking extends Plugin
                                 'de-DE' => 'Avis',
                                 Defaults::LANGUAGE_SYSTEM => "Avis"
                             ],
-                            'customFieldPosition' => 1
+                            'customFieldPosition' => 70
                         ]
-                    ],
+                    ]
+                ],
+                'relations' => [
+                    ['entityName' => 'order']
+                ]
+            ],
+            [
+                'name' => 'picking_list_options',
+                'config' => [
+                    'label' => [
+                        'en-GB' => 'Picking list order options',
+                        'de-DE' => 'Komissionierung',
+                        Defaults::LANGUAGE_SYSTEM => "Picking list order options"
+                    ]
+                ],
+                'active' => true,
+                'position' => 1,
+                'customFields' => [
                     [
                         'name' => 'exported',
                         'type' => CustomFieldTypes::CHECKBOX,
@@ -124,11 +143,11 @@ class MtoOrderPicking extends Plugin
                                 'de-DE' => 'Exportiert',
                                 Defaults::LANGUAGE_SYSTEM => "Exported"
                             ],
-                            'customFieldPosition' => 1
+                            'customFieldPosition' => 80
                         ]
                     ],
                     [
-                        'name' => 'order_number',
+                        'name' => 'order_export_number',
                         'type' => CustomFieldTypes::TEXT,
                         'config' => [
                             'label' => [
@@ -136,7 +155,7 @@ class MtoOrderPicking extends Plugin
                                 'de-DE' => 'Nummer',
                                 Defaults::LANGUAGE_SYSTEM => "Number"
                             ],
-                            'customFieldPosition' => 1
+                            'customFieldPosition' => 90
                         ]
                     ],
                 ],
@@ -155,7 +174,9 @@ class MtoOrderPicking extends Plugin
         $customFieldRepository = $this->container->get('custom_field_set.repository');
 
         $customFieldsCriteria = new Criteria();
-        $customFieldsCriteria->addFilter(new EqualsFilter('name', 'picking_list_options'));
+        $customFieldsCriteria->addFilter(
+            new EqualsAnyFilter('name', ['picking_list_options', 'order_export'])
+        );
         $customFieldsId = $customFieldRepository
             ->searchIds($customFieldsCriteria, $uninstallContext->getContext())
             ->firstId();
