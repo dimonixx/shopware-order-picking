@@ -115,23 +115,6 @@ class MtoOrderPicking extends Plugin
                             'customFieldPosition' => 1
                         ]
                     ],
-                ],
-                'relations' => [
-                    ['entityName' => 'order']
-                ]
-            ],
-            [
-                'name' => 'order_export',
-                'config' => [
-                    'label' => [
-                        'en-GB' => 'Export',
-                        'de-DE' => 'Export',
-                        Defaults::LANGUAGE_SYSTEM => "Export"
-                    ]
-                ],
-                'active' => true,
-                'position' => 1,
-                'customFields' => [
                     [
                         'name' => 'exported',
                         'type' => CustomFieldTypes::CHECKBOX,
