@@ -24,5 +24,10 @@
             <entity>customer_group</entity>
             <label>Customer groups allowed to use order picking lists</label>
         </component>
+        <component name="sw-entity-multi-id-select">
+            <name>paymentMethods</name>
+            <entity>payment_method</entity>
+            <label>Allowed payment methods when ordering with picking lists</label>
+        </component>
     </card>
 </config>
