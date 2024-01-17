@@ -23,12 +23,38 @@
       &.hidden {
         display: none;
       }
+
+      .is-cover {
+        img {
+          width: 75px;
+        }
+      }
     }
   }
 
   .order-picking-list-products {
     .product-price {
       padding: 0.5625rem;
+    }
+  }
+
+  .order-picking-lists-inner {
+    button {
+      width: 80%;
+      text-align: left;
+      position: relative;
+
+      .icon {
+        display: none;
+        right: 8px;
+        position: absolute;;
+      }
+
+      &.active {
+        .icon {
+          display: inline-flex;
+        }
+      }
     }
   }
 }

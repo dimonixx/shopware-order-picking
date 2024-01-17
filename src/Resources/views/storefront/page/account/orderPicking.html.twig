@@ -64,7 +64,8 @@
                                 </div>
                                 <div>
                                     <label class="form-label">
-                                        <input type="checkbox" data-shipping-option data-name="neutral" value="neutral"/>
+                                        <input type="checkbox" data-shipping-option data-name="neutral"
+                                               value="neutral"/>
                                         {{ 'account.pickingList.delivery-neutral'|trans }}
                                     </label>
                                 </div>
@@ -94,7 +95,7 @@
                             <div class="col-sm-12 header-row">
                                 <h5 class="header-minimal">{{ 'account.pickingList.overview'|trans }}</h5>
                             </div>
-                            <div class="pt-1 pb-1 mb-1" >
+                            <div class="pt-1 pb-1 mb-1">
                                 <label>
                                     <input class="form-input" data-picking-list-select-all type="checkbox"/>
                                     {{ 'pickingList.products.selectAll'|trans }}
@@ -104,8 +105,12 @@
                                 <div class="pt-1 pb-1 mb-1" data-picking-list
                                      data-picking-list-number="{{ pickingList.number }}">
                                     <input class="form-input" data-picking-list-select-all type="checkbox"/>
-                                    <button type="button" class="btn btn-info active w-75" data-bs-toggle="button" autocomplete="off">
+                                    <button type="button"
+                                            class="btn btn-info active"
+                                            data-bs-toggle="button"
+                                            autocomplete="off">
                                         {{ pickingList.name }}
+                                        {% sw_icon 'checkmark-circle' %}
                                     </button>
                                 </div>
                             {% endfor %}
@@ -132,7 +137,15 @@
                                                     <input type="checkbox">
                                                 </div>
                                                 <div class="col-md-auto p-0 px-1">
-                                                    <div style="height: 75px;width: 75px;background: antiquewhite;"></div>
+                                                    {% set media = page.customerOrderPicking.shopProducts[product.swagSku].media %}
+                                                    {% if media and media|length > 0 %}
+                                                        <span class="is-cover">
+                                                            {% sw_thumbnails 'product-image-thumbnails' with {
+                                                                media: media.first.media,
+                                                                sizes: sizes
+                                                            } %}
+                                                        </span>
+                                                    {% endif %}
                                                 </div>
                                                 <div class="col-md-7 p-0">
                                                     {{ page.customerOrderPicking.shopProducts[product.swagSku].name }} {{ product.swagSku }}
