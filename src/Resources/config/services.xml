@@ -26,6 +26,7 @@
             <argument type="service" id="Shopware\Core\Checkout\Cart\LineItemFactoryRegistry"/>
             <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
             <argument type="service" id="Shopware\Core\Checkout\Customer\SalesChannel\AccountService"/>
+            <argument type="service" id="MtoOrderPicking\Api\Provider\DataProvider"/>
             <argument type="service" id="product.repository"/>
             <argument type="service" id="customer_address.repository"/>
             <argument type="service" id="country.repository"/>
@@ -78,7 +79,10 @@
 
         <service id="MtoOrderPicking\Api\Provider\CachedDataProvider"
                  decorates="MtoOrderPicking\Api\Provider\DataProvider">
-            <argument type="service" id="MtoOrderPicking\Api\Provider\CachedDataProvider.inner"/>
+            <argument type="service" id="MtoOrderPicking\Api\ClientFactory"/>
+            <argument type="service" id="serializer"/>
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
             <argument type="service" id="cache.object"/>
         </service>
 
@@ -106,6 +110,7 @@
             <argument type="service" id="order.repository"/>
             <argument type="service" id="MtoOrderPicking\OrderExport\OrderConverter"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="logger"/>
         </service>
 
         <service id="MtoOrderPicking\OrderExport\Messaging\OrderExportHandler">
@@ -119,6 +124,14 @@
 
         <service id="MtoOrderPicking\Twig\OrderPickingExtension">
             <argument type="service" id="MtoOrderPicking\Acl\OrderPickingPermissions"/>
+        </service>
+
+        <service id="MtoOrderPicking\Console\OrderExportCommand">
+            <argument type="service" id="messenger.bus.shopware"/>
+            <argument type="service" id="order.repository"/>
+            <argument type="service" id="MtoOrderPicking\OrderExport\OrderExporter"/>
+            <argument type="service" id="MtoOrderPicking\OrderExport\OrderConverter"/>
+            <tag name="console.command" command="mto:order:export"/>
         </service>
 
     </services>

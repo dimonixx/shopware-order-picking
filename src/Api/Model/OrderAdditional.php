@@ -74,7 +74,7 @@ class OrderAdditional
 
     public function setFix(?string $fix): void
     {
-        $this->fix = (bool) $fix;
+        $this->fix = $fix;
     }
 
     public function getDeliveryDate(): ?string

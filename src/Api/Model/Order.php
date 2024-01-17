@@ -35,6 +35,13 @@ class Order
 
             if (! array_key_exists($pickingListNumber, $this->pickingLists)) {
                 $this->pickingLists[$pickingListNumber] = new PickingList();
+                $this->pickingLists[$pickingListNumber]->setNumber($pickingListNumber);
+                $this->pickingLists[$pickingListNumber]
+                    ->setName(
+                        array_key_exists('pickingListName', $payload) ?
+                            $payload['pickingListName'] :
+                            $payload['pickingListNumber']
+                    );
             }
 
             $pickingListProduct = new PickingListProduct();
@@ -53,6 +60,8 @@ class Order
             'neutral',
             'avis'
         );
+
+        $orderAdditional = array_filter($orderAdditional);
 
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 

@@ -24,7 +24,7 @@ class CustomerOrderPicking extends Struct
     protected array $shippingAddresses = [];
 
     /**
-     * @var array<PickingList>|PickingList[]
+     * @var array<PickingList>
      */
     protected array $pickingLists = [];
 

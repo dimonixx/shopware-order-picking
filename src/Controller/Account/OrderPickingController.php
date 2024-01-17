@@ -28,9 +28,7 @@ class OrderPickingController extends StorefrontController
 
         return $this->renderStorefront(
             '@MtoOrderPicking/storefront/page/account/orderPicking.html.twig',
-            [
-                'page' => $page
-            ]
+            ['page' => $page]
         );
     }
 

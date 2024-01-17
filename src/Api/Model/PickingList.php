@@ -11,7 +11,7 @@ class PickingList
     protected ?string $name;
 
     /**
-     * @var PickingListProduct[]|array<PickingListProduct>
+     * @var PickingListProduct[]
      */
     protected array $products = [];
 

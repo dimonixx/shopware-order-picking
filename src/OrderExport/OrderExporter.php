@@ -3,6 +3,7 @@
 namespace MtoOrderPicking\OrderExport;
 
 use MtoOrderPicking\Api\ClientFactoryInterface;
+use Psr\Log\LoggerInterface;
 use Shopware\Core\Checkout\Order\OrderEntity;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -21,9 +22,10 @@ class OrderExporter
 
     public function __construct(
         protected ClientFactoryInterface $clientFactory,
-        protected EntityRepository $entityRepository,
+        protected EntityRepository $orderRepository,
         protected OrderConverter $orderConverter,
-        protected SystemConfigService $configService
+        protected SystemConfigService $configService,
+        protected LoggerInterface $logger,
     ) {
     }
 
@@ -38,7 +40,7 @@ class OrderExporter
         ]);
         $criteria->addAssociations(['lineItems', 'lineItems.product']);
 
-        $order = $this->entityRepository->search($criteria, $context)->first();
+        $order = $this->orderRepository->search($criteria, $context)->first();
 
         if ($order instanceof OrderEntity) {
             try {
@@ -60,9 +62,31 @@ class OrderExporter
 
                 $responseData = json_decode($response, true);
 
+                if (array_key_exists('status', $responseData) && (int) $responseData['status']['code'] === 200) {
+                    $customFields = $order->getCustomFields();
+
+                    $customFields['order_number'] = $responseData['orderNumber'];
+                    $customFields['exported'] = 1;
+
+                    $order->setCustomFields($customFields);
+
+                    $this->orderRepository->update(
+                        [
+                            [
+                                'id' => $order->getId(),
+                                'customFields' => $customFields
+                            ]
+                        ],
+                        $context
+                    );
+                }
+
                 return self::EXPORT_SUCCESSFUL;
             } catch (\Exception $exception) {
-
+                $this->logger->error(
+                    sprintf('Order #%s could not be exported : %s', $order->getOrderNumber(), $exception->getMessage()),
+                    []
+                );
 
                 return self::EXPORT_FAILED;
             }

@@ -19,7 +19,18 @@ class OrderConverterEventSubscriber implements EventSubscriberInterface
         $convertedData = $event->getConvertedCart();
         $cart = $event->getCart();
 
-        $convertedData['customFields'] = $cart->getData()->get('options');
+        $options = array_filter($cart->getData()->get('options'));
+
+        if (array_key_exists('delivery_date', $options) && array_key_exists('fix', $options)) {
+            [$hours, $minutes] = explode(':', $options['fix']);
+
+            $options['fix'] = (new \DateTime($options['delivery_date']))
+                ->setTime($hours, $minutes)
+                ->format(\DateTime::RFC3339);
+        }
+
+        $convertedData['customFields'] = $options;
+
 
         $event->setConvertedCart($convertedData);
     }

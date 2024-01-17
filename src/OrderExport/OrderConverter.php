@@ -4,6 +4,7 @@ namespace MtoOrderPicking\OrderExport;
 
 use Shopware\Core\Checkout\Order\OrderEntity;
 use MtoOrderPicking\Api\Model\Order;
+use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class OrderConverter
@@ -16,6 +17,10 @@ class OrderConverter
     {
         $order = new Order($orderEntity);
 
-        return $this->serializer->serialize($order, 'json');
+        return $this->serializer->serialize(
+            $order,
+            'json',
+            [AbstractObjectNormalizer::SKIP_NULL_VALUES => true]
+        );
     }
 }

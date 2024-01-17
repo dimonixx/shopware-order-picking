@@ -1,7 +1,5 @@
 import Plugin from 'src/plugin-system/plugin.class'
 
-import HttpClient from 'src/service/http-client.service';
-
 import PluginManager from 'src/plugin-system/plugin.manager';
 import Iterator from 'src/helper/iterator.helper';
 
@@ -60,6 +58,19 @@ export default class OrderPickingPlugin extends Plugin {
                 });
             });
         });
+
+        this.el.querySelector('[data-shipping-option-toggle][data-name="fix"]')
+            .addEventListener('click', function (evt) {
+                if (evt.target.checked) {
+                    _self.el
+                        .querySelector('[data-shipping-option-container][data-name="fix"]')
+                        .classList.remove('hidden');
+                } else {
+                    _self.el
+                        .querySelector('[data-shipping-option-container][data-name="fix"]')
+                        .classList.add('hidden');
+                }
+            });
     }
 
     setPickingListProductsChecked(pickingListNumber, checked = true) {
@@ -98,6 +109,7 @@ export default class OrderPickingPlugin extends Plugin {
         productRows.forEach(function (productRow) {
             lineItems.push({
                 referencedId: productRow.dataset['productId'],
+                sku: productRow.dataset['productSku'],
                 pickingListNumber: productRow.dataset['pickingListNumber'],
                 quantity: productRow.querySelector('input.product-quantity').value,
                 netPrice: productRow.querySelector('input.product-net-price').value,

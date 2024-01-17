@@ -2,18 +2,30 @@
 
 namespace MtoOrderPicking\Api\Provider;
 
+use MtoOrderPicking\Api\ClientFactoryInterface;
 use MtoOrderPicking\Api\Model\CustomerOrderPicking;
+use MtoOrderPicking\Api\Model\PickingList;
 use MtoOrderPicking\Api\Model\PickingListProduct;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class CachedDataProvider implements DataProviderInterface
+class CachedDataProvider extends DataProvider implements DataProviderInterface
 {
     public const CACHE_TAG = 'picking-lists';
 
-    public function __construct(protected DataProviderInterface $dataProvdier, protected AdapterInterface $cache)
-    {
+    public function __construct(
+        ClientFactoryInterface $clientFactory,
+        SerializerInterface $serializer,
+        EntityRepository $productRepository,
+        SystemConfigService $configService,
+        protected AdapterInterface $cache
+    ) {
+        parent::__construct($clientFactory, $serializer, $productRepository, $configService);
     }
+
 
     public function getCustomerOrderPicking(SalesChannelContext $context): ?CustomerOrderPicking
     {
@@ -22,7 +34,7 @@ class CachedDataProvider implements DataProviderInterface
         $cacheItem = $this->cache->getItem($cacheKey);
 
         if (! $cacheItem->isHit()) {
-            $pickingLists = $this->dataProvdier->getCustomerOrderPicking($context);
+            $pickingLists = parent::getCustomerOrderPicking($context);
 
             $cacheItem->set($pickingLists);
             $cacheItem->tag(self::CACHE_TAG);
@@ -33,6 +45,11 @@ class CachedDataProvider implements DataProviderInterface
         return $cacheItem->get();
     }
 
+    public function getPickingList(string $pickingListNumber, SalesChannelContext $context): ?PickingList
+    {
+        return parent::getPickingList($pickingListNumber, $context);
+    }
+
     /**
      * @param  string  $productSku
      * @param  SalesChannelContext  $context
@@ -40,7 +57,7 @@ class CachedDataProvider implements DataProviderInterface
      */
     public function getProduct(string $productSku, SalesChannelContext $context): ?PickingListProduct
     {
-        return $this->dataProvdier->getProduct($productSku, $context);
+        return parent::getProduct($productSku, $context);
     }
 
     private function getCacheKey(SalesChannelContext $context): string

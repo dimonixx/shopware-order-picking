@@ -81,12 +81,12 @@ class MtoOrderPicking extends Plugin
                     ],
                     [
                         'name' => 'fix',
-                        'type' => CustomFieldTypes::CHECKBOX,
+                        'type' => CustomFieldTypes::DATETIME,
                         'config' => [
                             'label' => [
-                                'en-GB' => 'Fixed date',
+                                'en-GB' => 'Fixed',
                                 'de-DE' => 'Fixtermin',
-                                Defaults::LANGUAGE_SYSTEM => "Fixed date"
+                                Defaults::LANGUAGE_SYSTEM => "Fixed"
                             ],
                             'customFieldPosition' => 1
                         ]
@@ -111,6 +111,47 @@ class MtoOrderPicking extends Plugin
                                 'en-GB' => 'Avis',
                                 'de-DE' => 'Avis',
                                 Defaults::LANGUAGE_SYSTEM => "Avis"
+                            ],
+                            'customFieldPosition' => 1
+                        ]
+                    ],
+                ],
+                'relations' => [
+                    ['entityName' => 'order']
+                ]
+            ],
+            [
+                'name' => 'order_export',
+                'config' => [
+                    'label' => [
+                        'en-GB' => 'Export',
+                        'de-DE' => 'Export',
+                        Defaults::LANGUAGE_SYSTEM => "Export"
+                    ]
+                ],
+                'active' => true,
+                'position' => 1,
+                'customFields' => [
+                    [
+                        'name' => 'exported',
+                        'type' => CustomFieldTypes::CHECKBOX,
+                        'config' => [
+                            'label' => [
+                                'en-GB' => 'Exported',
+                                'de-DE' => 'Exportiert',
+                                Defaults::LANGUAGE_SYSTEM => "Exported"
+                            ],
+                            'customFieldPosition' => 1
+                        ]
+                    ],
+                    [
+                        'name' => 'order_number',
+                        'type' => CustomFieldTypes::TEXT,
+                        'config' => [
+                            'label' => [
+                                'en-GB' => 'Number',
+                                'de-DE' => 'Nummer',
+                                Defaults::LANGUAGE_SYSTEM => "Number"
                             ],
                             'customFieldPosition' => 1
                         ]

@@ -40,6 +40,15 @@ class DataProvider implements DataProviderInterface
         return $this->client;
     }
 
+    protected function prepareURI(string $uri, array $parameters): string
+    {
+        foreach ($parameters as $parameter => $value) {
+            $uri = preg_replace('/\{#'.$parameter.'#\}/', $value, $uri);
+        }
+
+        return $uri;
+    }
+
     public function getCustomerOrderPicking(SalesChannelContext $context): ?CustomerOrderPicking
     {
         $customerNumber = $context->getCustomer()->getCustomerNumber();
@@ -52,9 +61,9 @@ class DataProvider implements DataProviderInterface
 
         $orderPickingData = $this->getClient()
             ->request(
-                $uri,
-                Request::METHOD_POST,
-                ['body' => json_encode(['userNr' => $customerNumber]), 'headers' => 'Content-Type: application/json']
+                $this->prepareURI($uri, ['userId' => $customerNumber]),
+                Request::METHOD_GET,
+                ['headers' => 'Content-Type: application/json']
             );
 
         $customerOrderPickingData = null;
@@ -64,7 +73,8 @@ class DataProvider implements DataProviderInterface
                 ->deserialize(
                     $orderPickingData,
                     CustomerOrderPicking::class,
-                    'json'
+                    'json',
+                    ['disable_type_enforcement' => true]
                 );
 
             $skus = [];
@@ -90,6 +100,13 @@ class DataProvider implements DataProviderInterface
         }
 
         return $customerOrderPickingData;
+    }
+
+    public function getPickingList(string $pickingListNumber, SalesChannelContext $context): ?PickingList
+    {
+        $pickingLists = $this->getCustomerOrderPicking($context)->getPickingLists();
+
+        return array_key_exists($pickingListNumber, $pickingLists) ? $pickingLists[$pickingListNumber] : null;
     }
 
     public function getProduct(string $productSku, SalesChannelContext $context): ?PickingListProduct

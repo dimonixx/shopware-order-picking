@@ -76,8 +76,10 @@ class OrderPickingProcessor implements CartProcessorInterface
             $payload = $lineItem->getPayload();
 
             if (! array_key_exists('pickingListNumber', $payload)) {
+                $price = (float) $payload['pickingListProductGrossPrice'];
+
                 $priceDefinition = new QuantityPriceDefinition(
-                    (float) $payload['pickingListProductNetPrice'],
+                    $price,
                     $lineItem->getPrice()->getTaxRules(),
                     $lineItem->getPrice()->getQuantity()
                 );

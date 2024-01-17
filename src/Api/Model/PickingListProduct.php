@@ -15,9 +15,9 @@ class PickingListProduct implements \JsonSerializable
     #[SerializedName('qty')]
     protected ?string $quantity = null;
 
-    protected ?string $netPrice;
+    protected ?float $netPrice;
 
-    protected ?string $grossPrice;
+    protected ?float $grossPrice;
 
     public function getSwagSku(): ?string
     {
@@ -39,22 +39,22 @@ class PickingListProduct implements \JsonSerializable
         $this->quantity = $quantity;
     }
 
-    public function getNetPrice(): ?string
+    public function getNetPrice(): ?float
     {
         return $this->netPrice;
     }
 
-    public function setNetPrice(?string $netPrice): void
+    public function setNetPrice(?float $netPrice): void
     {
         $this->netPrice = $netPrice;
     }
 
-    public function getGrossPrice(): ?string
+    public function getGrossPrice(): ?float
     {
         return $this->grossPrice;
     }
 
-    public function setGrossPrice(?string $grossPrice): void
+    public function setGrossPrice(?float $grossPrice): void
     {
         $this->grossPrice = $grossPrice;
     }

@@ -2,14 +2,16 @@
 
 namespace MtoOrderPicking\OrderPicking\Service;
 
+use MtoOrderPicking\Api\Model\PickingListProduct;
+use MtoOrderPicking\Api\Provider\DataProviderInterface;
 use MtoOrderPicking\OrderPicking\Cart\OrderPickingExtension;
 use Shopware\Core\Checkout\Cart\Cart;
-use Shopware\Core\Checkout\Cart\CartPersister;
 use Shopware\Core\Checkout\Cart\LineItem\LineItem;
 use Shopware\Core\Checkout\Cart\LineItemFactoryRegistry;
 use Shopware\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
 use Shopware\Core\Checkout\Cart\SalesChannel\CartService;
 use Shopware\Core\Checkout\Customer\SalesChannel\AccountService;
+use Shopware\Core\Content\Product\ProductEntity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -22,6 +24,7 @@ class OrderPickingCartService
         protected LineItemFactoryRegistry $lineItemFactoryRegistry,
         protected CartService $cartService,
         protected AccountService $accountService,
+        protected DataProviderInterface $dataProvider,
         protected EntityRepository $productRepository,
         protected EntityRepository $customerAddressRepository,
         protected EntityRepository $countryAddressRepository,
@@ -49,6 +52,13 @@ class OrderPickingCartService
         }
 
         foreach ($lineItems as $lineItemData) {
+            $pickingListProduct = $this->dataProvider->getProduct($lineItemData['sku'], $salesChannelContext);
+
+            if ($pickingListProduct instanceof PickingListProduct) {
+                $lineItemData['netPrice'] = $pickingListProduct->getNetPrice();
+                $lineItemData['grossPrice'] = $pickingListProduct->getGrossPrice();
+            }
+
             $lineItem = $this->createOrFindLineItem($cart, $lineItemData, $salesChannelContext);
 
             if ($lineItem->isModified()) {
@@ -79,26 +89,44 @@ class OrderPickingCartService
         $lineItem = $existingLineItems->first();
 
         $quantity = (int) $lineItemData['quantity'];
-        $price = $lineItemData['netPrice'];
+        $price = $lineItemData['grossPrice'];
 
         if (! $lineItem instanceof LineItem) {
+            $pickingList = $this->dataProvider->getPickingList(
+                $lineItemData['pickingListNumber'],
+                $salesChannelContext
+            );
+
+            /* @var $product ProductEntity */
+
+            $product = $this->productRepository->search(
+                (new Criteria([$lineItemData['referencedId']]))->addAssociations(['tax', 'tax.rules']),
+                $salesChannelContext->getContext()
+            )->first();
+
+            $productTax = $product?->getTax();
+            $productTaxRules = [
+                [
+                    'taxRate' => $productTax->getTaxRate(),
+                    'percentage' => 100
+                ]
+            ];
+
             $lineItem = $this->lineItemFactoryRegistry->create(
                 [
                     'type' => LineItem::PRODUCT_LINE_ITEM_TYPE,
                     'referencedId' => $lineItemData['referencedId'],
                     'quantity' => (int) $lineItemData['quantity'],
-                    'payload' => ['pickingListNumber' => $lineItemData['pickingListNumber']],
+                    'payload' => [
+                        'pickingListNumber' => $lineItemData['pickingListNumber'],
+                        'pickingListName' => $pickingList?->getName()
+                    ],
                     'priceDefinition' => [
                         'price' => (float) $price,
                         'quantity' => $quantity,
                         'isCalculated' => true,
                         'type' => QuantityPriceDefinition::TYPE,
-                        'taxRules' => [
-                            [
-                                'taxRate' => 19, //TODO: get tax rate from shopware product
-                                'percentage' => 100,
-                            ]
-                        ]
+                        'taxRules' => $productTaxRules
                     ]
                 ],
                 $salesChannelContext

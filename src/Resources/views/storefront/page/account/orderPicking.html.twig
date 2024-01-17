@@ -11,7 +11,7 @@
             <div class="row order-picking gx-4" data-order-picking-plugin
                  data-order-picking-plugin-options='{{ orderPickingOptions|json_encode }}'>
                 {% block page_account_order_picking_shipping_details %}
-                    <div class="col-md-3 shipping-details p-2">
+                    <div class="col-sm-12 col-lg-3 order-lg-0 order-sm-2 shipping-details p-2">
                         <div class="shipping-details-inner h-100 px-2">
                             <div class="col-sm-12 header-row">
                                 <h5 class="header-minimal">{{ 'account.pickingList.shipping-details'|trans }}</h5>
@@ -47,7 +47,9 @@
                             <div class="form-group w-100">
                                 {% set pickerOptions = {
                                     locale: app.request.locale,
-                                    enableTime: false
+                                    enableTime: false,
+                                    minDate: page.minDate|format_date(pattern='Y-MM-dd'),
+                                    daysOfWeekDisabled: [0]
                                 } %}
 
                                 <label class="form-label">{{ 'account.pickingList.delivery-date'|trans }}</label>
@@ -58,9 +60,25 @@
                             <div class="form-group w-100">
                                 <div>
                                     <label class="form-label">
-                                        <input type="checkbox" data-shipping-option data-name="fix" value="fix"/>
+                                        <input type="checkbox" data-shipping-option-toggle data-name="fix"/>
                                         {{ 'account.pickingList.delivery-fix'|trans }}
                                     </label>
+
+                                    {% set timePickerOptions = {
+                                        enableTime: true,
+                                        dateFormat: 'H:i',
+                                        altFormat: 'H:i',
+                                        time_24hr: true,
+                                        weekNumbers: true,
+                                        noCalendar: true
+                                    } %}
+
+                                    <span class="hidden" data-shipping-option-container data-name="fix">
+                                        <input class="form-control"
+                                               data-date-picker
+                                               data-date-picker-options="{{ timePickerOptions|json_encode|escape('html_attr') }}"
+                                               data-shipping-option data-name="fix"/>
+                                    </span>
                                 </div>
                                 <div>
                                     <label class="form-label">
@@ -90,7 +108,7 @@
                 {% endblock %}
 
                 {% block page_account_order_picking_lists %}
-                    <div class="col-md-3 order-picking-lists p-2">
+                    <div class="col-sm-4 col-lg-3 order-lg-1 order-sm-0 order-picking-lists p-2">
                         <div class="order-picking-lists-inner h-100 px-2">
                             <div class="col-sm-12 header-row">
                                 <h5 class="header-minimal">{{ 'account.pickingList.overview'|trans }}</h5>
@@ -119,7 +137,7 @@
                 {% endblock %}
 
                 {% block page_account_order_picking_list_items %}
-                    <div class="col-md-6 order-picking-list-products p-2">
+                    <div class="col-sm-8 col-lg-6 order-lg-2 order-sm-1 order-picking-list-products p-2">
                         <div class="order-picking-list-products-inner h-100 overflow-y-auto px-2">
                             <div class="col-sm-12 header-row">
                                 <h5 class="header-minimal">{{ 'account.pickingList.products'|trans }}</h5>
@@ -154,15 +172,20 @@
                                             </div>
                                         </div>
                                         <div class="col-md-2 p-0">
-                                            <input value="{{ product.quantity }}"
-                                                   class="form-control text-center product-quantity"/>
+                                            <input value="{{ product.quantity }}" class="form-control text-center product-quantity"/>
                                         </div>
                                         <div class="col-md-2 p-0">
+                                            {% if page.showGrossPrice %}
+                                                {% set priceToShow = product.grossPrice%}
+                                            {% else %}
+                                                {% set priceToShow = product.netPrice%}
+                                            {% endif %}
+
                                             <input type="hidden" class="product-net-price"
                                                    value="{{ product.netPrice }}"/>
                                             <input type="hidden" class="product-gross-price"
-                                                   value="{{ product.netPrice }}"/>
-                                            <span class="product-price">{{ product.netPrice }}</span>
+                                                   value="{{ product.grossPrice }}"/>
+                                            <span class="product-price">{{ priceToShow|currency }}</span>
                                         </div>
                                     </div>
                                 {% endfor %}

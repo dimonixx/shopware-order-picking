@@ -29,6 +29,8 @@ class AccountOrderPickingPageLoader
             $page->setCustomerOrderPicking($customerOrderPicking);
         }
 
+        $page->setSalesChannelContext($context);
+
         return $page;
     }
 }
