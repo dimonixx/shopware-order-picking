@@ -16,6 +16,6 @@ class OrderPickingPermissions
     {
         $customerGroupIds = $this->configService->get('MtoOrderPicking.config.customerGroups');
 
-        return $customer !== null && in_array($customer->getGroupId(), $customerGroupIds);
+        return is_array($customerGroupIds) && $customer !== null && in_array($customer->getGroupId(), $customerGroupIds);
     }
 }
