@@ -1,6 +1,7 @@
 import Plugin from 'src/plugin-system/plugin.class'
 
 import PluginManager from 'src/plugin-system/plugin.manager';
+import FormValidationPlugin from 'src/plugin/forms/form-validation.plugin';
 import Iterator from 'src/helper/iterator.helper';
 
 export default class OrderPickingPlugin extends Plugin {
@@ -15,8 +16,16 @@ export default class OrderPickingPlugin extends Plugin {
         const _self = this;
 
         this.el.querySelector('button#order')
-            .addEventListener('click', function () {
-                _self.order();
+            .addEventListener('click', function (evt) {});
+
+        this.el.querySelector('form#shipping-details')
+            .addEventListener('submit', function (evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+
+                if (_self.el.querySelectorAll('input:invalid').length === 0) {
+                    _self.order();
+                }
             });
     }
 

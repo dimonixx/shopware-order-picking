@@ -12,98 +12,117 @@
                  data-order-picking-plugin-options='{{ orderPickingOptions|json_encode }}'>
                 {% block page_account_order_picking_shipping_details %}
                     <div class="col-sm-12 col-lg-3 order-lg-0 order-sm-2 shipping-details p-2">
-                        <div class="shipping-details-inner h-100 px-2">
-                            <div class="col-sm-12 header-row">
-                                <h5 class="header-minimal">{{ 'account.pickingList.shipping-details'|trans }}</h5>
-                            </div>
-                            <div class="form-group w-100">
-                                <label class="form-label">{{ 'account.pickingList.customer'|trans }}</label>
-                                <input type="text" data-shipping-option data-name="customer" class="form-control"/>
-                            </div>
-                            <div class="form-group w-100">
-                                <label class="form-label">{{ 'account.pickingList.phone'|trans }}</label>
-                                <input type="text" data-shipping-option data-name="phone" class="form-control"/>
-                            </div>
-                            <div class="form-group w-100">
-                                <label class="form-label">{{ 'account.pickingList.billing-address'|trans }}</label>
-                                <select class="form-control" data-billing-address>
-                                    {% for address in page.customerOrderPicking.billingAddresses %}
-                                        <option data-address="{{ address|json_encode }}">
-                                            {{ address.street }} {{ address.zip }} {{ address.city }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group w-100">
-                                <label class="form-label">{{ 'account.pickingList.shipping-address'|trans }}</label>
-                                <select class="form-control" data-shipping-address>
-                                    {% for address in page.customerOrderPicking.shippingAddresses %}
-                                        <option data-address="{{ address|json_encode }}">
-                                            {{ address.street }} {{ address.zip }} {{ address.city }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="form-group w-100">
-                                {% set pickerOptions = {
-                                    locale: app.request.locale,
-                                    enableTime: false,
-                                    minDate: page.minDate|format_date(pattern='Y-MM-dd'),
-                                    daysOfWeekDisabled: [0]
-                                } %}
-
-                                <label class="form-label">{{ 'account.pickingList.delivery-date'|trans }}</label>
-                                <input class="form-control" data-date-picker
-                                       data-date-picker-options="{{ pickerOptions|json_encode|escape('html_attr') }}"
-                                       data-shipping-option data-name="delivery_date"/>
-                            </div>
-                            <div class="form-group w-100">
-                                <div>
-                                    <label class="form-label">
-                                        <input type="checkbox" data-shipping-option-toggle data-name="fix"/>
-                                        {{ 'account.pickingList.delivery-fix'|trans }}
-                                    </label>
-
-                                    {% set timePickerOptions = {
-                                        enableTime: true,
-                                        dateFormat: 'H:i',
-                                        altFormat: 'H:i',
-                                        time_24hr: true,
-                                        weekNumbers: true,
-                                        noCalendar: true
+                        <form id="shipping-details" data-form-validation="true" novalidate="novalidate">
+                            <div class="shipping-details-inner h-100 px-2">
+                                <div class="col-sm-12 header-row">
+                                    <h5 class="header-minimal">{{ 'account.pickingList.shipping-details'|trans }}</h5>
+                                </div>
+                                <div class="form-group has-validation w-100">
+                                    <label class="form-label is--required">{{ 'account.pickingList.customer'|trans }}*</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           data-name="customer"
+                                           data-shipping-option
+                                           data-form-validation-required
+                                           required="required"/>
+                                    <div class="invalid-feedback">
+                                        {{ 'account.pickingList.validation.customer'|trans }}
+                                    </div>
+                                </div>
+                                <div class="form-group w-100">
+                                    <label class="form-label">{{ 'account.pickingList.phone'|trans }}</label>
+                                    <input type="text"
+                                           data-shipping-option
+                                           data-name="phone"
+                                           class="form-control"/>
+                                </div>
+                                <div class="form-group w-100">
+                                    <label class="form-label">{{ 'account.pickingList.billing-address'|trans }}*</label>
+                                    <select class="form-control" data-billing-address required>
+                                        {% for address in page.customerOrderPicking.billingAddresses %}
+                                            <option data-address="{{ address|json_encode }}">
+                                                {{ address.street }} {{ address.zip }} {{ address.city }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group w-100">
+                                    <label class="form-label">{{ 'account.pickingList.shipping-address'|trans }}*</label>
+                                    <select class="form-control" data-shipping-address required>
+                                        {% for address in page.customerOrderPicking.shippingAddresses %}
+                                            <option data-address="{{ address|json_encode }}">
+                                                {{ address.street }} {{ address.zip }} {{ address.city }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group w-100">
+                                    {% set pickerOptions = {
+                                        locale: app.request.locale,
+                                        enableTime: false,
+                                        minDate: page.minDate|format_date(pattern='Y-MM-dd'),
+                                        daysOfWeekDisabled: [0]
                                     } %}
 
-                                    <span class="hidden" data-shipping-option-container data-name="fix">
-                                        <input class="form-control"
-                                               data-date-picker
-                                               data-date-picker-options="{{ timePickerOptions|json_encode|escape('html_attr') }}"
-                                               data-shipping-option data-name="fix"/>
-                                    </span>
+                                    <label class="form-label">{{ 'account.pickingList.delivery-date'|trans }}*</label>
+                                    <input class="form-control" data-date-picker
+                                           data-form-validation-required
+                                           data-date-picker-options="{{ pickerOptions|json_encode|escape('html_attr') }}"
+                                           data-shipping-option
+                                           data-name="delivery_date"
+                                           required="required"/>
+                                    <div class="invalid-feedback">
+                                        {{ 'account.pickingList.validation.deliveryDate'|trans }}
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="form-label">
-                                        <input type="checkbox" data-shipping-option data-name="neutral"
-                                               value="neutral"/>
-                                        {{ 'account.pickingList.delivery-neutral'|trans }}
-                                    </label>
+                                <div class="form-group w-100">
+                                    <div>
+                                        <label class="form-label">
+                                            <input type="checkbox" data-shipping-option-toggle data-name="fix"/>
+                                            {{ 'account.pickingList.delivery-fix'|trans }}
+                                        </label>
+
+                                        {% set timePickerOptions = {
+                                            enableTime: true,
+                                            dateFormat: 'H:i',
+                                            altFormat: 'H:i',
+                                            time_24hr: true,
+                                            weekNumbers: true,
+                                            noCalendar: true
+                                        } %}
+
+                                        <span class="hidden" data-shipping-option-container data-name="fix">
+                                            <input class="form-control"
+                                                   data-date-picker
+                                                   data-date-picker-options="{{ timePickerOptions|json_encode|escape('html_attr') }}"
+                                                   data-shipping-option data-name="fix"/>
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">
+                                            <input type="checkbox" data-shipping-option data-name="neutral"
+                                                   value="neutral"/>
+                                            {{ 'account.pickingList.delivery-neutral'|trans }}
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">
+                                            <input type="checkbox" data-shipping-option data-name="avis" value="avis"/>
+                                            {{ 'account.pickingList.delivery-avis'|trans }}
+                                        </label>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="form-label">
-                                        <input type="checkbox" data-shipping-option data-name="avis" value="avis"/>
-                                        {{ 'account.pickingList.delivery-avis'|trans }}
-                                    </label>
+                                <div class="form-group w-100">
+                                    <label class="form-label">{{ 'account.pickingList.notes'|trans }}</label>
+                                    <textarea class="form-control" data-shipping-option data-name="notes"></textarea>
+                                </div>
+                                <div class="form-group w-100">
+                                    <button type="submit" class="btn btn-primary w-100" id="order">
+                                        {{ 'account.pickingList.add-to-cart'|trans }}
+                                    </button>
                                 </div>
                             </div>
-                            <div class="form-group w-100">
-                                <label class="form-label">{{ 'account.pickingList.notes'|trans }}</label>
-                                <textarea class="form-control" data-shipping-option data-name="notes"></textarea>
-                            </div>
-                            <div class="form-group w-100">
-                                <button class="btn btn-primary w-100" id="order">
-                                    {{ 'account.pickingList.add-to-cart'|trans }}
-                                </button>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 {% endblock %}
 

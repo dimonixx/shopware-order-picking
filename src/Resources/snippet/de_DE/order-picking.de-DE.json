@@ -14,7 +14,11 @@
       "notes": "Anmerkungen",
       "add-to-cart": "Zum Warenkorb hinzufügen",
       "overview": "Kommissionsübersicht",
-      "products": "Artikelübersicht"
+      "products": "Artikelübersicht",
+      "validation": {
+        "customer": "Customer is required",
+        "deliveryDate": "Please enter a delivery date"
+      }
     }
   },
   "pickingList": {

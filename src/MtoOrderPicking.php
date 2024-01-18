@@ -123,12 +123,12 @@ class MtoOrderPicking extends Plugin
                 ]
             ],
             [
-                'name' => 'picking_list_options',
+                'name' => 'order_export',
                 'config' => [
                     'label' => [
-                        'en-GB' => 'Picking list order options',
-                        'de-DE' => 'Komissionierung',
-                        Defaults::LANGUAGE_SYSTEM => "Picking list order options"
+                        'en-GB' => 'Export',
+                        'de-DE' => 'Export',
+                        Defaults::LANGUAGE_SYSTEM => "Export"
                     ]
                 ],
                 'active' => true,

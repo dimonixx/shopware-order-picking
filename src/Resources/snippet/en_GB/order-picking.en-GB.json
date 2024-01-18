@@ -14,7 +14,11 @@
       "notes": "Notes",
       "add-to-cart": "Add to cart",
       "overview": "Pickinglists",
-      "products": "Products"
+      "products": "Products",
+      "validation": {
+        "customer": "Customer is required",
+        "deliveryDate": "Please enter a delivery date"
+      }
     }
   },
   "pickingList": {
