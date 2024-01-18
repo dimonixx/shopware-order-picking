@@ -15,6 +15,7 @@
       "add-to-cart": "Add to cart",
       "overview": "Pickinglists",
       "products": "Products",
+      "required-fields": "Fields with * are required ",
       "validation": {
         "customer": "Customer is required",
         "deliveryDate": "Please enter a delivery date"

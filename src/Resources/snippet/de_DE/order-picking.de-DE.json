@@ -15,9 +15,10 @@
       "add-to-cart": "Zum Warenkorb hinzufügen",
       "overview": "Kommissionsübersicht",
       "products": "Artikelübersicht",
+      "required-fields": "Mit * markierte Felder sind Pflichtfelder",
       "validation": {
-        "customer": "Customer is required",
-        "deliveryDate": "Please enter a delivery date"
+        "customer": "Auftraggeber ist ein Pflichtfeld",
+        "deliveryDate": "Geben Sie bitte ein Lieferdatum ein"
       }
     }
   },
