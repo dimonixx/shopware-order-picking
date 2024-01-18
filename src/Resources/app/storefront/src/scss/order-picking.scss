@@ -7,6 +7,12 @@
     max-height: 800px;
   }
 
+  .shipping-details {
+    form {
+      height: 100%;
+    }
+  }
+
   .shipping-details-inner, .order-picking-lists-inner, .order-picking-list-products-inner {
     border-color: var(--bs-table-color);
     border: 1px solid;
